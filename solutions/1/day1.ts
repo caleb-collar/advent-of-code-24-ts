@@ -1,7 +1,7 @@
 import { sumArray } from "../../util.ts";
 
 const dayOne = (lines: string[]) => {
-    console.log("Day 1 challenge");
+    console.log("Historian Hysteria 📚");
     const arrays = getArrays(lines);
     console.log("SUM: ", sumArray(getDiff(arrays)));
     console.log("SIMILARITY: ", sumArray(getSimilarityScore(arrays)));
