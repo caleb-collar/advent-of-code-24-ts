@@ -49,10 +49,8 @@ const getFilePathFromArgs = async (): Promise<AdventOfCodeDay> => {
   return { day: day ?? 0, inputFile: input };
 };
 
-const getFileLines = async (filePath: string): Promise<string[]> => {
-  const text = await Deno.readTextFile(filePath);
-  return text.split("\n");
-};
+const getFileLines = async (filePath: string): Promise<string[]> =>
+  (await Deno.readTextFile(filePath)).split("\n").map((line) => line.trim());
 
 const colors = [
   "\x1b[38;5;160m", // Deep Red
