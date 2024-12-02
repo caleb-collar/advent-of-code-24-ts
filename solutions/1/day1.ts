@@ -1,36 +1,36 @@
 import { sumArray } from "../../util.ts";
 
 const dayOne = (lines: string[]) => {
-    console.log("Historian Hysteria 📚");
-    const arrays = getArrays(lines);
-    console.log("SUM: ", sumArray(getDiff(arrays)));
-    console.log("SIMILARITY: ", sumArray(getSimilarityScore(arrays)));
+  console.log("Historian Hysteria 📚");
+  const arrays = getArrays(lines);
+  console.log("SUM: ", sumArray(getDiff(arrays)));
+  console.log("SIMILARITY: ", sumArray(getSimilarityScore(arrays)));
 };
 
 const getSimilarityScore = ([left, right]: number[][]) => {
-    return left.map((num) => right.filter((x) => x === num).length * num);
+  return left.map((num) => right.filter((x) => x === num).length * num);
 };
 
 const getDiff = ([left, right]: number[][]) => {
-    return left.map((num, i) => Math.abs(num - right[i]));
+  return left.map((num, i) => Math.abs(num - right[i]));
 };
 
 const getArrays = (lines: string[]) => {
-    const leftNumbers: number[] = [];
-    const rightNumbers: number[] = [];
+  const leftNumbers: number[] = [];
+  const rightNumbers: number[] = [];
 
-    lines.forEach((line) => {
-        const [left, right] = line.split(/\s+/);
-        if (left && right) {
-            leftNumbers.push(parseInt(left));
-            rightNumbers.push(parseInt(right));
-        }
-    });
+  lines.forEach((line) => {
+    const [left, right] = line.split(/\s+/);
+    if (left && right) {
+      leftNumbers.push(parseInt(left));
+      rightNumbers.push(parseInt(right));
+    }
+  });
 
-    leftNumbers.sort((a, b) => a - b);
-    rightNumbers.sort((a, b) => a - b);
+  leftNumbers.sort((a, b) => a - b);
+  rightNumbers.sort((a, b) => a - b);
 
-    return [leftNumbers, rightNumbers];
+  return [leftNumbers, rightNumbers];
 };
 
 export default dayOne;
