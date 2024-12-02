@@ -1,0 +1,15 @@
+
+# Deno
+deno.lock
+deno_dir/
+*.log
+
+# Node.js
+node_modules/
+
+# TypeScript
+*.tsbuildinfo
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
