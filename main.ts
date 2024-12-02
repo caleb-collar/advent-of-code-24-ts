@@ -1,66 +1,66 @@
 type AdventOfCodeDay = {
-    day: number;
-    inputFile: string;
+  day: number;
+  inputFile: string;
 };
 
 const getFilePathFromArgs = async (): Promise<AdventOfCodeDay> => {
-    const args = Deno.args;
-    let input: string | null = null;
-    let day: number | null = null;
+  const args = Deno.args;
+  let input: string | null = null;
+  let day: number | null = null;
 
-    if (!args.length) {
-        const numberInput = prompt(
-            "Please enter AoC day (1 - 25) or 'p' for file path: ",
-        );
-        day = Number(numberInput);
+  if (!args.length) {
+    const numberInput = prompt(
+      "Please enter AoC day (1 - 25) or 'p' for file path: ",
+    );
+    day = Number(numberInput);
 
-        if (day >= 1 && day <= 25) {
-            const dirPath = `./inputs/${day}`;
-            for await (const dirEntry of Deno.readDir(dirPath)) {
-                if (dirEntry.isFile) {
-                    input = `${dirPath}/${dirEntry.name}`;
-                    console.log(`Reading file: ${input}`);
-                    break;
-                }
-            }
+    if (day >= 1 && day <= 25) {
+      const dirPath = `./inputs/${day}`;
+      for await (const dirEntry of Deno.readDir(dirPath)) {
+        if (dirEntry.isFile) {
+          input = `${dirPath}/${dirEntry.name}`;
+          console.log(`Reading file: ${input}`);
+          break;
         }
-
-        while (!input) {
-            input = prompt("Please enter the file path:");
-            if (!input) {
-                console.log("No input provided. Please try again.");
-            }
-        }
-
-        if (input) {
-            const match = input.match(/\d+/);
-            if (match) {
-                day = Number(match[0]);
-            }
-        }
-    } else {
-        input = args[0];
-        const match = input.match(/\d+/);
-        if (match) {
-            day = Number(match[0]);
-        }
+      }
     }
 
-    return { day: day ?? 0, inputFile: input };
+    while (!input) {
+      input = prompt("Please enter the file path:");
+      if (!input) {
+        console.log("No input provided. Please try again.");
+      }
+    }
+
+    if (input) {
+      const match = input.match(/\d+/);
+      if (match) {
+        day = Number(match[0]);
+      }
+    }
+  } else {
+    input = args[0];
+    const match = input.match(/\d+/);
+    if (match) {
+      day = Number(match[0]);
+    }
+  }
+
+  return { day: day ?? 0, inputFile: input };
 };
 
 const getFileLines = async (filePath: string): Promise<string[]> => {
-    const text = await Deno.readTextFile(filePath);
-    return text.split("\n");
+  const text = await Deno.readTextFile(filePath);
+  return text.split("\n");
 };
 
 const colors = [
-    "\x1b[38;5;160m", // Deep Red
-    "\x1b[38;5;196m", // Bright Red
-    "\x1b[38;5;22m", // Dark Green
-    "\x1b[38;5;157m", // Light Green
-    "\x1b[33m", // Gold
-    "\x1b[37m", // White
+  "\x1b[38;5;160m", // Deep Red
+  "\x1b[38;5;196m", // Bright Red
+  "\x1b[38;5;22m", // Dark Green
+  "\x1b[38;5;157m", // Light Green
+  "\x1b[33m", // Gold
+  "\x1b[37m", // White
 ];
 const bold = "\x1b[1m";
 const reset = "\x1b[0m";
@@ -116,5 +116,5 @@ const main = async () => {
 
 // Wrap main execution
 if (import.meta.main) {
-    await main();
+  await main();
 }

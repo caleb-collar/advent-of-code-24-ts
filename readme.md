@@ -1,4 +1,6 @@
-### Running:
+# Advent of Code 2024 Typescript Solutions
+
+## Running
 
 `deno run --allow-read ./main.ts`
 
