@@ -1,7 +1,7 @@
-import { ArrExt } from '../../util/util.ts';
+import { ArrExt, colors, reset } from '../../util/util.ts';
 
 const dayTwo = (lines: string[]) => {
-  console.log('Red-Nosed Reports ☢ 🦌');
+  console.log(`${colors[3]}Red-Nosed Reports ☢ 🦌${reset}`);
   const numSafe = lines.filter(strictReportAnalyzer).length;
   const numFlexSafe = lines.filter(flexibleReportAnalyzer).length;
   console.log('❄ STRICTLY SAFE REPORTS: ', numSafe);
