@@ -1,5 +1,4 @@
-/** Represents a number and its positions in the grid */
-export type NumberInfo = { value: number; positions: Set<string> };
+import { AdventOfCodeDay, NumberInfo } from './types.ts';
 
 export const colors = [
   '\x1b[38;5;160m', // Deep Red
@@ -150,11 +149,6 @@ export class Graph {
     return { value: parseInt(num), positions };
   }
 }
-
-export type AdventOfCodeDay = {
-  day: number;
-  inputFile: string;
-};
 
 export class FileHandler {
   static async getFilePathFromArgs(): Promise<AdventOfCodeDay> {
