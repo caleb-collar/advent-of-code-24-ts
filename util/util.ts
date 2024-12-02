@@ -2,15 +2,15 @@
 export type NumberInfo = { value: number; positions: Set<string> };
 
 export const colors = [
-  "\x1b[38;5;160m", // Deep Red
-  "\x1b[38;5;196m", // Bright Red
-  "\x1b[38;5;22m", // Dark Green
-  "\x1b[38;5;157m", // Light Green
-  "\x1b[33m", // Gold
-  "\x1b[37m", // White
+  '\x1b[38;5;160m', // Deep Red
+  '\x1b[38;5;196m', // Bright Red
+  '\x1b[38;5;22m', // Dark Green
+  '\x1b[38;5;157m', // Light Green
+  '\x1b[33m', // Gold
+  '\x1b[37m', // White
 ] as const;
-export const bold = "\x1b[1m" as const;
-export const reset = "\x1b[0m" as const;
+export const bold = '\x1b[1m' as const;
+export const reset = '\x1b[0m' as const;
 
 export class ArrExt<T> extends Array<T> {
   constructor(...items: T[]) {
@@ -44,7 +44,7 @@ export class ArrExt<T> extends Array<T> {
     return arr.reduce<number>(
       (sum, num) =>
         sum +
-        (typeof num === "string"
+        (typeof num === 'string'
           ? parseInt(num, 10)
           : num as unknown as number),
       0,
@@ -90,7 +90,7 @@ export class Graph {
 
   /** Creates a graph from an array of strings */
   constructor(lines: string[]) {
-    this.data = lines.map((line) => line.trim().split(""));
+    this.data = lines.map((line) => line.trim().split(''));
   }
 
   /** Checks if a position is within grid boundaries */
@@ -114,7 +114,7 @@ export class Graph {
 
   /** Checks if character is a symbol (not a digit or period) */
   isSymbol(char: string): boolean {
-    return char !== "." && !this.isDigit(char);
+    return char !== '.' && !this.isDigit(char);
   }
 
   /** Checks if character is a digit */
@@ -135,7 +135,7 @@ export class Graph {
     let col = start.col;
     while (col > 0 && this.isDigit(this.data[start.row][col - 1])) col--;
 
-    let num = "";
+    let num = '';
     const positions = new Set<string>();
 
     // Collect all digits and their positions
@@ -180,9 +180,9 @@ export class FileHandler {
       }
 
       while (!input) {
-        input = prompt("Please enter the file path:");
+        input = prompt('Please enter the file path:');
         if (!input) {
-          console.log("No input provided. Please try again.");
+          console.log('No input provided. Please try again.');
         }
       }
 
@@ -204,6 +204,8 @@ export class FileHandler {
   }
 
   static async getFileLines(filePath: string): Promise<string[]> {
-    return (await Deno.readTextFile(filePath)).split("\n").map((line) => line.trim());
+    return (await Deno.readTextFile(filePath)).split('\n').map((line) =>
+      line.trim()
+    );
   }
 }
