@@ -1,10 +1,10 @@
-import { sumArray } from "../../util.ts";
+import { ArrExt } from "../../util.ts";
 
 const dayOne = (lines: string[]) => {
   console.log("Historian Hysteria 📚");
   const arrays = getArrays(lines);
-  console.log("SUM: ", sumArray(getDiff(arrays)));
-  console.log("SIMILARITY: ", sumArray(getSimilarityScore(arrays)));
+  console.log("SUM: ", ArrExt.sum(getDiff(arrays)));
+  console.log("SIMILARITY: ", ArrExt.sum(getSimilarityScore(arrays)));
 };
 
 const getSimilarityScore = ([left, right]: number[][]) => {

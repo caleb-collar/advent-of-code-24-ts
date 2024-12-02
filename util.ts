@@ -1,12 +1,45 @@
 /** Represents a number and its positions in the grid */
 export type NumberInfo = { value: number; positions: Set<string> };
 
-/** Sums an array of numbers or numeric strings */
-export const sumArray = (numbers: (string | number)[]): number =>
-  numbers.reduce<number>(
-    (sum, num) => sum + (typeof num === "string" ? parseInt(num, 10) : num),
-    0,
-  );
+export class ArrExt<T> extends Array<T> {
+  constructor(...items: T[]) {
+    super(...items);
+  }
+
+  /**
+   * Checks if the array is sorted in ascending order.
+   * @param {T[]} arr - The array to check.
+   * @returns {boolean} True if the array is sorted in ascending order, otherwise false.
+   */
+  static isAscending<T>(arr: T[]): boolean {
+    return arr.every((value, index) => index === 0 || value >= arr[index - 1]);
+  }
+
+  /**
+   * Checks if the array is sorted in descending order.
+   * @param {T[]} arr - The array to check.
+   * @returns {boolean} True if the array is sorted in descending order, otherwise false.
+   */
+  static isDescending<T>(arr: T[]): boolean {
+    return arr.every((value, index) => index === 0 || value <= arr[index - 1]);
+  }
+
+  /**
+   * Calculates the sum of the array elements.
+   * @param {Array<number | string>} arr - The array to sum.
+   * @returns {number} The sum of the array elements.
+   */
+  static sum(arr: Array<number | string>): number {
+    return arr.reduce<number>(
+      (sum, num) =>
+        sum +
+        (typeof num === "string"
+          ? parseInt(num, 10)
+          : num as unknown as number),
+      0,
+    );
+  }
+}
 
 /** Eight possible directions for adjacent positions (diagonals included) */
 export const directions = [
