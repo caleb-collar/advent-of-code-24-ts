@@ -1,12 +1,12 @@
 import { AdventOfCodeDay, NumberInfo } from './types.ts';
 
 export const colors = [
-  '\x1b[38;5;160m', // Deep Red
-  '\x1b[38;5;196m', // Bright Red
-  '\x1b[38;5;22m', // Dark Green
-  '\x1b[38;5;157m', // Light Green
-  '\x1b[33m', // Gold
-  '\x1b[37m', // White
+  '\x1b[38;5;160m', // Deep Red 0
+  '\x1b[38;5;196m', // Bright Red 1
+  '\x1b[38;5;22m', // Dark Green 2
+  '\x1b[38;5;157m', // Light Green 3
+  '\x1b[33m', // Gold 4
+  '\x1b[37m', // White 5
 ] as const;
 export const bold = '\x1b[1m' as const;
 export const reset = '\x1b[0m' as const;
