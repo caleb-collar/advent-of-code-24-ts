@@ -2,30 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C++ Launch",
-      "type": "cppdbg",
+      "name": "Launch Program",
+      "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/day_three_jordan.exe",
-      "args": [],
-      "stopAtEntry": false,
+      "program": "${workspaceFolder}/main.ts",
       "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
+      "runtimeExecutable": "deno",
+      "runtimeArgs": [
+        "run",
+        "--inspect-brk",
+        "--allow-all"
       ],
-      "preLaunchTask": "build",
-      "miDebuggerPath": "C:/ProgramData/mingw64/mingw64/bin/gdb.exe",
-      "logging": {
-        "trace": true,
-        "traceResponse": true,
-        "engineLogging": true
-      }
+      "attachSimplePort": 9229
     }
   ]
 }
