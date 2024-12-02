@@ -1,5 +1,5 @@
-import asciiArt from "./util/ascii.ts";
-import { bold, colors, FileHandler, reset } from "./util/util.ts";
+import asciiArt from './util/ascii.ts';
+import { bold, colors, FileHandler, reset } from './util/util.ts';
 
 // Main function with cli, file reading, solution execution, and error handling
 const main = async () => {
@@ -15,7 +15,7 @@ const main = async () => {
 
     // Get the list of solution files for the specified day
     const solutionFiles = Array.from(Deno.readDirSync(`./solutions/${day}`))
-      .filter((entry) => entry.isFile && entry.name.endsWith(".ts"))
+      .filter((entry) => entry.isFile && entry.name.endsWith('.ts'))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     // Throw an error if no solution files are found
@@ -40,7 +40,7 @@ const main = async () => {
     console.log(`\n${bold}${colors[0]}An error occurred! ${reset}\n${error}\n`);
   } finally {
     // Prompt the user to press any key to exit
-    console.log("Press any key to exit...");
+    console.log('Press any key to exit...');
     Deno.stdin.setRaw(true);
     await Deno.stdin.read(new Uint8Array(1));
     Deno.stdin.setRaw(false);
