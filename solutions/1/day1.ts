@@ -1,4 +1,4 @@
-import { ArrExt } from "../../util.ts";
+import { ArrExt } from "../../util/util.ts";
 
 const dayOne = (lines: string[]) => {
   console.log("Historian Hysteria 📚");

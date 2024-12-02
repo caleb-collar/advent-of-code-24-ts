@@ -1,6 +1,17 @@
 /** Represents a number and its positions in the grid */
 export type NumberInfo = { value: number; positions: Set<string> };
 
+export const colors = [
+  "\x1b[38;5;160m", // Deep Red
+  "\x1b[38;5;196m", // Bright Red
+  "\x1b[38;5;22m", // Dark Green
+  "\x1b[38;5;157m", // Light Green
+  "\x1b[33m", // Gold
+  "\x1b[37m", // White
+] as const;
+export const bold = "\x1b[1m" as const;
+export const reset = "\x1b[0m" as const;
+
 export class ArrExt<T> extends Array<T> {
   constructor(...items: T[]) {
     super(...items);
@@ -137,5 +148,62 @@ export class Graph {
     }
 
     return { value: parseInt(num), positions };
+  }
+}
+
+export type AdventOfCodeDay = {
+  day: number;
+  inputFile: string;
+};
+
+export class FileHandler {
+  static async getFilePathFromArgs(): Promise<AdventOfCodeDay> {
+    const args = Deno.args;
+    let input: string | null = null;
+    let day: number | null = null;
+
+    if (!args.length) {
+      const numberInput = prompt(
+        "Please enter AoC day (1 - 25) or 'p' for file path: ",
+      );
+      day = Number(numberInput);
+
+      if (day >= 1 && day <= 25) {
+        const dirPath = `./inputs/${day}`;
+        for await (const dirEntry of Deno.readDir(dirPath)) {
+          if (dirEntry.isFile) {
+            input = `${dirPath}/${dirEntry.name}`;
+            console.log(`Reading file: ${input}`);
+            break;
+          }
+        }
+      }
+
+      while (!input) {
+        input = prompt("Please enter the file path:");
+        if (!input) {
+          console.log("No input provided. Please try again.");
+        }
+      }
+
+      if (input) {
+        const match = input.match(/\d+/);
+        if (match) {
+          day = Number(match[0]);
+        }
+      }
+    } else {
+      input = args[0];
+      const match = input.match(/\d+/);
+      if (match) {
+        day = Number(match[0]);
+      }
+    }
+
+    return { day: day ?? 0, inputFile: input };
+  }
+
+  static async getFileLines(filePath: string): Promise<string[]> {
+    return (await Deno.readTextFile(filePath)).split("\n").map((line) => line.trim());
   }
 }

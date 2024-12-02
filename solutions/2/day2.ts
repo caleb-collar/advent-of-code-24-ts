@@ -1,4 +1,4 @@
-import { ArrExt } from "../../util.ts";
+import { ArrExt } from "../../util/util.ts";
 
 const dayTwo = (lines: string[]) => {
   console.log("Red-Nosed Reports ☢ 🦌");
