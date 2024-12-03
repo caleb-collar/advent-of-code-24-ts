@@ -10,9 +10,11 @@ const dayThree = (lines: string[]) => {
   console.log(`${colors[3]}Mull It Over 🧮${reset}`);
   const input = lines.join();
   const mulInstructions = matchMul(input);
-  const allInstructions = matchMul(input)
-    .concat(matchDoDont(input))
-    .sort((a, b) => a.index - b.index);
+  const doDontInstructions = matchDoDont(input);
+  const allInstructions = mulInstructions.concat(doDontInstructions).sort((
+    a,
+    b,
+  ) => a.index - b.index);
 
   console.log('❄ INSTRUCTION RESULTS: ', getTotal(mulInstructions));
   console.log('❄ CONDITIONAL INSTRUCTION RESULTS: ', getTotal(allInstructions));
