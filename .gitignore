@@ -1,4 +1,3 @@
-
 # Deno
 deno.lock
 deno_dir/
@@ -13,3 +12,7 @@ node_modules/
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+# Input Files
+inputs/*
+!inputs/input.md
