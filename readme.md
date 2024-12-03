@@ -20,6 +20,23 @@
   <img src="./media/screencap.png" alt="Screenshot" width="425" />
 </p>
 
+<h3 align="center">Inputs:</h3>
+
+<p align="center">
+Structure your puzzle inputs like this and they will work with the cli.
+</p>
+
+```
+📦inputs
+ ┣ 📂1
+ ┃ ┗ 📜day1.txt
+ ┣ 📂2
+ ┃ ┗ 📜day2.txt
+ ┣ 📂3
+ ┃ ┗ 📜day3.txt
+ ┗ 📜input.md
+```
+
 <h3 align="center">Citations:</h3>
 
 <p align="center">
