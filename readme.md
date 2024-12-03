@@ -53,7 +53,7 @@ Structure your puzzle inputs like this and they will work with the cli.
   </a>
 </p>
 
-#
+# 
 
 <p align="center">
   <img src="./media/christmas-2.gif" alt="Christmas Presents" width="350" />
