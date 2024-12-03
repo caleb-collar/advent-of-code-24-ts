@@ -30,12 +30,13 @@
   <a href="https://deno.land/">
     <img src="./media/deno.svg" alt="Deno Logo" width="100" />
   </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
   <a href="https://www.typescriptlang.org/">
     <img src="./media/ts-lettermark-blue.svg" alt="TypeScript Logo" width="100" />
   </a>
 </p>
 
----
+#
 
 <p align="center">
   <img src="./media/christmas-2.gif" alt="Christmas Presents" width="350" />
