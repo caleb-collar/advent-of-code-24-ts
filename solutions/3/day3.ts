@@ -1,4 +1,4 @@
-import { colors, reset } from '../../util/util.ts';
+import { bold, colors, reset } from '../../util/util.ts';
 
 type Instruction = {
   operation: 'mul' | 'do' | "don't";
@@ -6,8 +6,10 @@ type Instruction = {
   index: number;
 };
 
+const title = 'Mull It Over 🧮';
+
 const dayThree = (lines: string[]) => {
-  console.log(`${colors[3]}Mull It Over 🧮${reset}`);
+  console.log(`${bold}${colors[3]}${title}${reset}`);
   const input = lines.join();
   const mulInstructions = matchMul(input);
   const doDontInstructions = matchDoDont(input);

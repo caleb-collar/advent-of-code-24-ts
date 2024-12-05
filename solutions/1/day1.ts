@@ -1,7 +1,9 @@
-import { ArrExt, colors, reset } from '../../util/util.ts';
+import { ArrExt, bold, colors, reset } from '../../util/util.ts';
+
+const title = 'Historian Hysteria 📚';
 
 const dayOne = (lines: string[]) => {
-  console.log(`${colors[3]}Historian Hysteria 📚${reset}`);
+  console.log(`${bold}${colors[3]}${title}${reset}`);
   const arrays = getArrays(lines);
   console.log('❄ SUM: ', ArrExt.sum(getDiff(arrays)));
   console.log('❄ SIMILARITY: ', ArrExt.sum(getSimilarityScore(arrays)));
