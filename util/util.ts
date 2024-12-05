@@ -1,4 +1,4 @@
-import { AdventOfCodeDay, NumberInfo } from './types.ts';
+import { AdventOfCodeDay, NumberInfo, Position } from './types.ts';
 
 export const colors = [
   '\x1b[38;5;160m', // Deep Red 0
@@ -51,45 +51,38 @@ export class ArrExt<T> extends Array<T> {
   }
 }
 
-/** Eight possible directions for adjacent positions (diagonals included) */
-export const directions = [
-  [-1, -1], // top-left
-  [-1, 0], // top
-  [-1, 1], // top-right
-  [0, -1], // left
-  [0, 1], // right
-  [1, -1], // bottom-left
-  [1, 0], // bottom
-  [1, 1], // bottom-right
-] as const;
-
-/** Represents a position in a 2D grid */
-export class Position {
-  constructor(public row: number, public col: number) {}
-
-  /** Converts position to string format "row,col" */
-  toString(): string {
-    return `${this.row},${this.col}`;
-  }
-
-  /** Returns all eight adjacent positions (including diagonals) */
-  getAdjacentPositions(): Position[] {
-    return directions.map(([dx, dy]) =>
-      new Position(
-        this.row + dx,
-        this.col + dy,
-      )
-    );
-  }
-}
-
-/** Represents a 2D grid of characters with utility methods */
+/** Graph class for characters with utility methods */
 export class Graph {
-  private data: string[][];
+  public data: string[][];
+
+  /** Eight possible directions for adjacent positions (diagonals included) */
+  static directions = [
+    [-1, -1], // top-left
+    [-1, 0], // top
+    [-1, 1], // top-right
+    [0, -1], // left
+    [0, 1], // right
+    [1, -1], // bottom-left
+    [1, 0], // bottom
+    [1, 1], // bottom-right
+  ] as const;
 
   /** Creates a graph from an array of strings */
   constructor(lines: string[]) {
     this.data = lines.map((line) => line.trim().split(''));
+  }
+
+  /** Converts position to string format "row,col" */
+  toString(pos: Position): string {
+    return `${pos.row},${pos.col}`;
+  }
+
+  /** Returns all eight adjacent positions (including diagonals) */
+  getAdjacentPositions(pos: Position): Position[] {
+    return Graph.directions.map(([dx, dy]) => ({
+      row: pos.row + dx,
+      col: pos.col + dy,
+    }));
   }
 
   /** Checks if a position is within grid boundaries */
@@ -105,7 +98,7 @@ export class Graph {
 
   /** Checks if position has any adjacent symbol */
   hasAdjacentSymbol(pos: Position): boolean {
-    return pos.getAdjacentPositions()
+    return this.getAdjacentPositions(pos)
       .some((adjPos) =>
         this.isInBounds(adjPos) && this.isSymbol(this.charAt(adjPos))
       );
@@ -142,7 +135,7 @@ export class Graph {
       col < this.data[0].length && this.isDigit(this.data[start.row][col])
     ) {
       num += this.data[start.row][col];
-      positions.add(new Position(start.row, col).toString());
+      positions.add(this.toString({ row: start.row, col }));
       col++;
     }
 
