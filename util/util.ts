@@ -141,6 +141,34 @@ export class Graph {
 
     return { value: parseInt(num), positions };
   }
+
+  stats(): string {
+    const c = { warning: colors[0], info: colors[3], reset: colors[5] };
+    
+    if (!this.data?.length || !this.data[0]?.length) 
+      return `${c.warning}Empty graph${c.reset}`;
+      
+    const [rows, cols] = [this.data.length, this.data[0].length];
+    const totalCells = rows * cols;
+    
+    if (this.data.some(row => row.length !== cols))
+      return `${c.warning}Invalid graph: inconsistent row lengths${c.reset}`;
+  
+    const counts = this.data.flat().reduce((acc, char) => ({
+      digits: acc.digits + Number(this.isDigit(char)),
+      symbols: acc.symbols + Number(this.isSymbol(char))
+    }), { digits: 0, symbols: 0 });
+  
+    const formatPercent = (count: number): string => 
+      `${count} ${c.info}(${((count/totalCells)*100).toFixed(2)}%)${c.reset}`;
+    
+    return [
+      `  ❄ ${c.info}Dimensions: ${c.reset}${rows}x${cols}`,
+      `  ❄ ${c.info}Total cells: ${c.reset}${totalCells}`,
+      `  ❄ ${c.info}Digits: ${c.reset}${formatPercent(counts.digits)}`,
+      `  ❄ ${c.info}Symbols: ${c.reset}${formatPercent(counts.symbols)}`
+    ].join('\n');
+  }
 }
 
 export class FileHandler {
