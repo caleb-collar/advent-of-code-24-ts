@@ -4,3 +4,5 @@ export type AdventOfCodeDay = {
   day: number;
   inputFile: string;
 };
+
+export type Position = { row: number; col: number };
