@@ -1,15 +1,16 @@
 import { Position } from '../../util/types.ts';
-import { colors, Graph, reset } from '../../util/util.ts';
+import { bold, colors, Graph, reset } from '../../util/util.ts';
 
 const title = 'Ceres Search 🛰️';
 
 const dayFour = (lines: string[]) => {
-  console.log(`${colors[3]}${title}${reset}`);
+  console.log(`${bold}${colors[3]}${title}${reset}`);
   const graph = new Graph(lines);
   const foundWordsXmas = wordSearch(graph, 'XMAS');
   const foundWordsMas = wordSearch(graph, 'MAS');
   const intersections = identifyXIntersections(foundWordsMas);
-
+  console.log('❄ GRAPH STATS:');
+  console.log(graph.stats());
   console.log('❄ WORD SEARCH RESULTS: ', foundWordsXmas.length);
   console.log('❄ "X" INTERSECTION COUNT: ', intersections.length);
 };
