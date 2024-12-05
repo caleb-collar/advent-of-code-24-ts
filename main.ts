@@ -36,8 +36,20 @@ const main = async () => {
     // Execute the solution with the input lines
     await solution(lines);
   } catch (error) {
-    // Handle any errors that occur during execution
-    console.log(`\n${bold}${colors[0]}An error occurred! ${reset}\n${error}\n`);
+    if (error instanceof Deno.errors.NotFound) {
+      console.log(`\n${bold}${colors[0]}Input file not found! ${reset}`);
+      console.log(
+        `\n${bold}${
+          colors[2]
+        }Go to https://adventofcode.com/2024 ${reset}\n\n${error.message}\n`,
+      );
+      Deno.exit();
+    } else {
+      // Handle any other errors that occur during execution
+      console.log(
+        `\n${bold}${colors[0]}An error occurred! ${reset}\n${error}\n`,
+      );
+    }
   } finally {
     // Prompt the user to press any key to exit
     console.log('Press any key to exit...');
