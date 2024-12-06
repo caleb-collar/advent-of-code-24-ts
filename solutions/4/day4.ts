@@ -15,19 +15,6 @@ const dayFour = (lines: string[]) => {
   console.log('❄ "X" INTERSECTION COUNT: ', intersections.length);
 };
 
-// This function is nice to visualize the graph with matches.
-// deno-lint-ignore no-unused-vars
-const printHighlightedGraph = (graph: UndirectedGraph, positions: Position[]) =>
-  console.log(
-    graph.data.map((row, i) =>
-      row.map((char, j) =>
-        positions.some((p) => p.row === i && p.col === j)
-          ? `${colors[1]}${char}${reset}`
-          : char
-      ).join('')
-    ).join('\n'),
-  );
-
 const identifyXIntersections = (foundWords: Position[][]): Position[][] => {
   const isDiagonal = (p: Position[]) =>
     p.length > 1 &&

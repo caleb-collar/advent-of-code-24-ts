@@ -97,6 +97,25 @@ export class UndirectedGraph {
     return this.data[pos.row][pos.col];
   }
 
+  /**
+   * Sets the character at given position
+   * @param pos Position to update
+   * @param value New character value
+   * @returns this (for method chaining)
+   * @throws Error if position is out of bounds
+   */
+  setNode(pos: Position, value: string): UndirectedGraph {
+    if (!this.isInBounds(pos)) {
+      throw new Error(`Position ${this.toString(pos)} is out of bounds`);
+    }
+    if (value.length !== 1) {
+      throw new Error('Value must be a single character');
+    }
+
+    this.data[pos.row][pos.col] = value;
+    return this;
+  }
+
   /** Checks if position has any adjacent symbol */
   hasAdjacentSymbol(pos: Position): boolean {
     return this.getAdjacentPositions(pos)
@@ -141,6 +160,18 @@ export class UndirectedGraph {
     }
 
     return { value: parseInt(num), positions };
+  }
+
+  printHighlighted(positions: Position[]): void {
+    console.log(
+      this.data.map((row, i) =>
+        row.map((char, j) =>
+          positions.some((p) => p.row === i && p.col === j)
+            ? `${colors[1]}${char}${reset}`
+            : char
+        ).join('')
+      ).join('\n'),
+    );
   }
 
   stats(): string {
