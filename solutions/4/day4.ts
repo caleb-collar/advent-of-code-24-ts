@@ -1,11 +1,11 @@
 import { Position } from '../../util/types.ts';
-import { bold, colors, Graph, reset } from '../../util/util.ts';
+import { bold, colors, reset, UndirectedGraph } from '../../util/util.ts';
 
 const title = 'Ceres Search 🛰️';
 
 const dayFour = (lines: string[]) => {
   console.log(`${bold}${colors[3]}${title}${reset}`);
-  const graph = new Graph(lines);
+  const graph = new UndirectedGraph(lines);
   const foundWordsXmas = wordSearch(graph, 'XMAS');
   const foundWordsMas = wordSearch(graph, 'MAS');
   const intersections = identifyXIntersections(foundWordsMas);
@@ -17,7 +17,7 @@ const dayFour = (lines: string[]) => {
 
 // This function is nice to visualize the graph with matches.
 // deno-lint-ignore no-unused-vars
-const printHighlightedGraph = (graph: Graph, positions: Position[]) =>
+const printHighlightedGraph = (graph: UndirectedGraph, positions: Position[]) =>
   console.log(
     graph.data.map((row, i) =>
       row.map((char, j) =>
@@ -51,11 +51,11 @@ const identifyXIntersections = (foundWords: Position[][]): Position[][] => {
 };
 
 const identifyWord = (
-  graph: Graph,
+  graph: UndirectedGraph,
   word: string,
   startPos: Position,
 ): Position[][] =>
-  Graph.directions.flatMap(([dx, dy]) =>
+  UndirectedGraph.directions.flatMap(([dx, dy]) =>
     [-1, 1].flatMap((direction) => {
       const positions = [...Array(word.length)].map((_, i) => ({
         row: startPos.row + i * dx * direction,
@@ -71,7 +71,7 @@ const identifyWord = (
     })
   );
 
-const wordSearch = (graph: Graph, word: string): Position[][] =>
+const wordSearch = (graph: UndirectedGraph, word: string): Position[][] =>
   [...Array(graph.data.length)].flatMap((_, row) =>
     [...Array(graph.data[0].length)].map((_, col) => ({ row, col }))
   )

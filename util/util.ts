@@ -51,8 +51,9 @@ export class ArrExt<T> extends Array<T> {
   }
 }
 
+//TODO: Make this similar to DirectedGraph<T>
 /** Graph class for characters with utility methods */
-export class Graph {
+export class UndirectedGraph {
   public data: string[][];
 
   /** Eight possible directions for adjacent positions (diagonals included) */
@@ -79,7 +80,7 @@ export class Graph {
 
   /** Returns all eight adjacent positions (including diagonals) */
   getAdjacentPositions(pos: Position): Position[] {
-    return Graph.directions.map(([dx, dy]) => ({
+    return UndirectedGraph.directions.map(([dx, dy]) => ({
       row: pos.row + dx,
       col: pos.col + dy,
     }));
@@ -171,6 +172,83 @@ export class Graph {
       `  ❄ ${c.info}Total cells: ${c.reset}${totalCells}`,
       `  ❄ ${c.info}Digits: ${c.reset}${formatPercent(counts.digits)}`,
       `  ❄ ${c.info}Symbols: ${c.reset}${formatPercent(counts.symbols)}`,
+    ].join('\n');
+  }
+}
+
+export class DirectedGraph<T> {
+  private nodes = new Map<string, T>();
+  private edges = new Map<string, Set<string>>();
+
+  addNode(key: string, value: T): this {
+    this.nodes.set(key, value);
+    if (!this.edges.has(key)) {
+      this.edges.set(key, new Set());
+    }
+    return this;
+  }
+
+  addEdge(from: string, to: string): this {
+    if (!this.nodes.has(from) || !this.nodes.has(to)) {
+      throw new Error('Cannot add edge between non-existent nodes');
+    }
+    if (!this.edges.has(from)) {
+      this.edges.set(from, new Set());
+    }
+    this.edges.get(from)!.add(to);
+    return this;
+  }
+
+  getValue(key: string): T | undefined {
+    return this.nodes.get(key);
+  }
+
+  hasNode(key: string): boolean {
+    return this.nodes.has(key);
+  }
+
+  getSuccessors(key: string): Set<string> {
+    return this.edges.get(key) || new Set();
+  }
+
+  tap(fn: (graph: this) => void): this {
+    fn(this);
+    return this;
+  }
+
+  topologicalSort(
+    startNodes: string[],
+  ): { sorted: string[]; visited: Set<string> } {
+    const result: string[] = [];
+    const visited = new Set<string>();
+    const temp = new Set<string>();
+
+    const visit = (node: string) => {
+      if (temp.has(node)) throw new Error('Circular dependency');
+      if (visited.has(node)) return;
+
+      temp.add(node);
+      this.edges.get(node)?.forEach(visit);
+      temp.delete(node);
+      visited.add(node);
+      result.push(node);
+    };
+
+    startNodes.forEach((node) => {
+      if (!visited.has(node)) visit(node);
+    });
+
+    return { sorted: result.reverse(), visited };
+  }
+
+  stats(): string {
+    const nodeCount = this.nodes.size;
+    const edgeCount = Array.from(this.edges.values())
+      .reduce((sum, edges) => sum + edges.size, 0);
+    return [
+      `Nodes: ${nodeCount}`,
+      `Edges: ${edgeCount}`,
+      `Average out-degree: ${(edgeCount / nodeCount).toFixed(2)}`,
     ].join('\n');
   }
 }
