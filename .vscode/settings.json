@@ -5,6 +5,13 @@
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno",
     "editor.tabSize": 2,
-    "editor.insertSpaces": true
+    "editor.insertSpaces": true,
+    "editor.rulers": [80],
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true
   }
 }
