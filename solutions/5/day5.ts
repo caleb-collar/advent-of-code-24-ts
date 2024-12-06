@@ -1,15 +1,17 @@
-import { bold, colors, reset } from '../../util/util.ts';
+import { bold, colors, DirectedGraph, reset } from '../../util/util.ts';
 
 const title = 'Print Queue 🖨️';
 
 const dayFive = (lines: string[]) => {
   console.log(`${bold}${colors[3]}${title}${reset}`);
 
-  const validRulesAndUpdates = checkUpdatesValid(getRulesAndUpdates(lines));
-  const updateMidSum = sumValidMiddleValues(validRulesAndUpdates);
-
+  const { rules, updates } = getRulesAndUpdates(lines);
+  const validUpdates = checkUpdatesValid({ rules, updates });
+  const updateMidSum = sumValidMiddleValues(validUpdates);
+  const reorderedUpdates = reorderUpdates(rules, validUpdates);
+  const reorderedUpdateMidSum = sumValidMiddleValues(reorderedUpdates);
   console.log('❄ VALID UPDATES MIDDLE SUM: ', updateMidSum);
-  console.log('❄ P2: ');
+  console.log('❄ REORDERED UPDATES MIDDLE SUM: ', reorderedUpdateMidSum);
 };
 
 const getRulesAndUpdates = (
@@ -32,6 +34,29 @@ const checkUpdatesValid = ({
       .every(([a, b]) => update.indexOf(a) < update.indexOf(b)),
     update,
   }));
+
+const reorderUpdates = (
+  rules: number[][],
+  entries: ReturnType<typeof checkUpdatesValid>,
+) =>
+  entries
+    .filter(({ valid }) => !valid)
+    .map(({ update }) => {
+      const graph = new DirectedGraph<number>()
+        .tap((g) => update.forEach((n) => g.addNode(n.toString(), n)))
+        .tap((g) =>
+          rules
+            .filter(([a, b]) => update.includes(a) && update.includes(b))
+            .forEach(([a, b]) => g.addEdge(a.toString(), b.toString()))
+        );
+
+      const { sorted } = graph.topologicalSort(update.map((n) => n.toString()));
+
+      return {
+        valid: true,
+        update: sorted.map((key) => graph.getValue(key)!),
+      };
+    });
 
 const sumValidMiddleValues = (entries: ReturnType<typeof checkUpdatesValid>) =>
   entries
