@@ -8,12 +8,25 @@ const title = 'Guard Gallivant 💂‍';
 const daySix = (lines: string[]) => {
   console.log(`${bold}${colors[3]}${title}${reset}`);
   const graph = new UndirectedGraph(lines);
+  const referenceGraph = new UndirectedGraph(lines);
   const initialPosition = getStartPos(graph);
-  const path = findPath(graph, initialPosition);
-  console.log(graph.printHighlighted(path));
+  const solution = findPath(graph, initialPosition);
+  const loopObstaclePositions = calculateObstaclePositionsForLoop(
+    referenceGraph,
+    initialPosition,
+    solution.path,
+  );
+  //console.log(graph.printHighlighted(solution.path));
+  //console.log(graph.printHighlighted(loopObstaclePositions));
 
-  console.log('❄ DISTINCT POSITIONS: ', sumUniquePositions(path));
-  console.log('❄ pt2: ');
+  console.log(
+    '❄ DISTINCT POSITIONS ON PATH: ',
+    sumUniquePositions(solution.path),
+  );
+  console.log(
+    '❄ POSSIBLE NEW OBSTACLE POSITIONS FOR LOOPS: ',
+    sumUniquePositions(loopObstaclePositions),
+  );
 };
 
 const getStartPos = (graph: UndirectedGraph): Guard => {
@@ -55,35 +68,64 @@ const updatePos = (graph: UndirectedGraph, guard: Guard): Position => {
 const findPath = (graph: UndirectedGraph, startGuard: Guard) => {
   const path = [startGuard.pos];
   const guard = { ...startGuard };
+  const seen = new Map<string, Set<Direction>>();
 
   while (true) {
     const pos = updatePos(graph, guard);
     path.push(pos);
+
+    const key = graph.toString(pos);
+    const dirs = seen.get(key) ?? seen.set(key, new Set()).get(key)!;
+    if (dirs.has(guard.dir)) return { path, loop: true };
+    dirs.add(guard.dir);
 
     graph.setNode(
       pos,
       '^v<>'[['up', 'down', 'left', 'right'].indexOf(guard.dir)],
     );
 
-    const { row, col, dir } = { ...pos, dir: guard.dir };
-    const next = {
-      row: row + (dir === 'down' ? 1 : dir === 'up' ? -1 : 0),
-      col: col + (dir === 'right' ? 1 : dir === 'left' ? -1 : 0),
-    };
+    const [dx, dy] = guard.dir === 'down'
+      ? [1, 0]
+      : guard.dir === 'up'
+      ? [-1, 0]
+      : guard.dir === 'right'
+      ? [0, 1]
+      : [0, -1];
+
+    if (!graph.isInBounds({ row: pos.row + dx, col: pos.col + dy })) {
+      return { path, loop: false };
+    }
 
     if (
-      !graph.isInBounds(next) ||
-      (graph.toString(pos) === graph.toString(startGuard.pos) &&
-        dir === startGuard.dir && path.length > 1)
-    ) break;
+      graph.toString(pos) === graph.toString(startGuard.pos) &&
+      guard.dir === startGuard.dir &&
+      path.length > 1
+    ) {
+      return { path, loop: true };
+    }
   }
-
-  return path;
 };
 
-const sumUniquePositions = (path: Position[]) => {
-  const uniquePositions = new Set(path.map((pos) => `${pos.row},${pos.col}`));
-  return uniquePositions.size;
-};
+const calculateObstaclePositionsForLoop = (
+  graph: UndirectedGraph,
+  start: Guard,
+  path: Position[],
+): Position[] =>
+  path
+    .filter((pos) => !(pos.row === start.pos.row && pos.col === start.pos.col)) // Skip start
+    .filter((pos) => {
+      try {
+        return findPath(
+          new UndirectedGraph(graph.data.map((row) => row.join('')))
+            .setNode(pos, '#'),
+          start,
+        ).loop;
+      } catch {
+        return false;
+      }
+    });
+
+const sumUniquePositions = (path: Position[]) =>
+  new Set(path.map((pos) => `${pos.row},${pos.col}`)).size;
 
 export default daySix;
