@@ -1,4 +1,6 @@
+import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts';
 import asciiArt from './util/ascii.ts';
+import spinners from './util/spinners.ts';
 import { bold, colors, FileHandler, reset } from './util/util.ts';
 
 // Main function with cli, file reading, solution execution, and error handling
@@ -52,10 +54,15 @@ const main = async () => {
     }
   } finally {
     // Prompt the user to press any key to exit
-    console.log('Press any key to exit...');
+    const spinner = new Kia({
+      text: 'Press any key to exit...',
+      spinner: spinners.christmas,
+    });
+    spinner.start();
     Deno.stdin.setRaw(true);
     await Deno.stdin.read(new Uint8Array(1));
     Deno.stdin.setRaw(false);
+    spinner.stop();
     Deno.exit();
   }
 };
