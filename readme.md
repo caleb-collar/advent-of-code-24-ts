@@ -7,6 +7,10 @@
 <h3 align="center">Running:</h3>
 
 <p align="center">
+  <code>deno run main</code>
+  <br>
+  or
+  <br>
   <code>deno run --allow-read ./main.ts</code>
   <br>
   or
@@ -17,7 +21,7 @@
 <p align="center">👇</p>
 
 <p align="center">
-  <img src="./media/screencap.png" alt="Screenshot" width="425" />
+  <img src="./media/screencap.gif" alt="cli screencapture" width="425" />
 </p>
 
 <h3 align="center">Inputs:</h3>
@@ -53,7 +57,7 @@ Structure your puzzle inputs like this and they will work with the cli.
   </a>
 </p>
 
-# 
+#
 
 <p align="center">
   <img src="./media/christmas-2.gif" alt="Christmas Presents" width="350" />
