@@ -16,3 +16,6 @@ Thumbs.db
 # Input Files
 inputs/*
 !inputs/input.md
+
+# Output Files
+build/*
