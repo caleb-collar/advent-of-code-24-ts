@@ -19,3 +19,4 @@ inputs/*
 
 # Output Files
 build/*
+*.exe

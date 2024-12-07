@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "main": "deno run --allow-read ./main.ts"
+    "main": "deno run --allow-read ./main.ts",
+    "build": "deno compile --allow-read  --output ./build/aoc24.exe --icon ./media/elf.ico ./main.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
