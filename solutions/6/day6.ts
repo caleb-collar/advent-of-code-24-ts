@@ -1,3 +1,5 @@
+import Kia from 'https://deno.land/x/kia@0.4.1/mod.ts';
+import spinners from '../../util/spinners.ts';
 import { Direction, Position } from '../../util/types.ts';
 import { bold, colors, reset, UndirectedGraph } from '../../util/util.ts';
 
@@ -5,17 +7,12 @@ type Guard = { pos: Position; dir: Direction };
 
 const title = 'Guard Gallivant 💂‍';
 
-const daySix = (lines: string[]) => {
+const daySix = async (lines: string[]) => {
   console.log(`${bold}${colors[3]}${title}${reset}`);
   const graph = new UndirectedGraph(lines);
   const referenceGraph = new UndirectedGraph(lines);
   const initialPosition = getStartPos(graph);
   const solution = findPath(graph, initialPosition);
-  const loopObstaclePositions = calculateObstaclePositionsForLoop(
-    referenceGraph,
-    initialPosition,
-    solution.path,
-  );
   //console.log(graph.printHighlighted(solution.path));
   //console.log(graph.printHighlighted(loopObstaclePositions));
 
@@ -23,9 +20,17 @@ const daySix = (lines: string[]) => {
     '❄ DISTINCT POSITIONS ON PATH: ',
     sumUniquePositions(solution.path),
   );
+  const spinner = new Kia({ text: 'Computing...', spinner: spinners.arc });
+  spinner.start();
+  const result = await calculateObstaclePositionsForLoop(
+    referenceGraph,
+    initialPosition,
+    solution.path,
+  );
+  spinner.stop();
   console.log(
     '❄ POSSIBLE NEW OBSTACLE POSITIONS FOR LOOPS: ',
-    sumUniquePositions(loopObstaclePositions),
+    sumUniquePositions(result),
   );
 };
 
@@ -106,24 +111,31 @@ const findPath = (graph: UndirectedGraph, startGuard: Guard) => {
   }
 };
 
-const calculateObstaclePositionsForLoop = (
+const calculateObstaclePositionsForLoop = async (
   graph: UndirectedGraph,
   start: Guard,
   path: Position[],
-): Position[] =>
-  path
-    .filter((pos) => !(pos.row === start.pos.row && pos.col === start.pos.col)) // Skip start
-    .filter((pos) => {
-      try {
-        return findPath(
-          new UndirectedGraph(graph.data.map((row) => row.join('')))
-            .setNode(pos, '#'),
-          start,
-        ).loop;
-      } catch {
-        return false;
-      }
-    });
+): Promise<Position[]> => {
+  const positions = path.filter(
+    (pos) => !(pos.row === start.pos.row && pos.col === start.pos.col),
+  );
+  const results: (Position | null)[] = [];
+  for (const pos of positions) {
+    // Add small delay to prevent blocking
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    try {
+      const newGraph = new UndirectedGraph(
+        graph.data.map((row) => row.join('')),
+      );
+      newGraph.setNode(pos, '#');
+      const result = findPath(newGraph, start).loop ? pos : null;
+      results.push(result);
+    } catch {
+      results.push(null);
+    }
+  }
+  return results.filter((pos): pos is Position => pos !== null);
+};
 
 const sumUniquePositions = (path: Position[]) =>
   new Set(path.map((pos) => `${pos.row},${pos.col}`)).size;
