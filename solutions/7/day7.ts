@@ -44,7 +44,6 @@ const tokenize = (expression: string): Token[] => {
   const tokens = expression.match(
     new RegExp(`(\\d+|${safeRegexPatternFrom(Object.keys(operations))})`, 'g'),
   );
-  console.log('tokens: ', tokens);
   if (!tokens) throw new Error('Invalid expression format');
 
   return tokens.map((token) =>
