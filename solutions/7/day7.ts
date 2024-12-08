@@ -1,4 +1,4 @@
-import { bold, colors, reset } from '../../util/util.ts';
+import { ArrExt, bold, colors, reset } from '../../util/util.ts';
 
 const title = 'Bridge Repair 🌉';
 
@@ -6,7 +6,7 @@ type Calibration = {
   outcome: number;
   operands: string[];
   valid?: boolean;
-  expression?: string;
+  expressions?: string[];
 };
 
 type Operator = '+' | '*';
@@ -28,8 +28,8 @@ const daySeven = (lines: string[]) => {
 
   const calibrations = lines.map(getOutcomeAndOperands);
   const testResults = testAllOperators(calibrations);
-  console.log(testResults);
-  console.log('❄ pt1: ');
+  const sumValid = ArrExt.sum(testResults.map((c) => c.valid ? c.outcome : 0));
+  console.log('❄ SUM OF VALID CALIBRATION RESULTS: ', sumValid);
   console.log('❄ pt2: ');
 };
 
@@ -106,7 +106,9 @@ const testAllOperators = (calibrations: Calibration[]) => {
     const expressions = buildExpressions(operands);
     const results = expressions.map(evaluateExpression);
     calibration.valid = results.includes(outcome);
-    calibration.expression = expressions[results.indexOf(outcome)];
+    calibration.expressions = expressions.filter((_, i) =>
+      results[i] === outcome
+    );
     return calibration;
   });
 };
