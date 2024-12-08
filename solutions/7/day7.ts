@@ -1,4 +1,10 @@
-import { ArrExt, bold, colors, reset } from '../../util/util.ts';
+import {
+  ArrExt,
+  bold,
+  colors,
+  reset,
+  safeRegexPatternFrom,
+} from '../../util/util.ts';
 
 const title = 'Bridge Repair 🌉';
 
@@ -12,11 +18,6 @@ type Calibration = {
 type Operator = '+' | '*';
 
 type Token = number | Operator;
-
-const operatorPrecedence: Record<Operator, number> = {
-  '*': 2,
-  '+': 1,
-};
 
 const operations: Record<Operator, (a: number, b: number) => number> = {
   '*': (a, b) => a * b,
@@ -40,7 +41,10 @@ const getOutcomeAndOperands = (line: string): Calibration => {
 };
 
 const tokenize = (expression: string): Token[] => {
-  const tokens = expression.match(/(\d+|[\+\-\*\/])/g);
+  const tokens = expression.match(
+    new RegExp(`(\\d+|${safeRegexPatternFrom(Object.keys(operations))})`, 'g'),
+  );
+  console.log('tokens: ', tokens);
   if (!tokens) throw new Error('Invalid expression format');
 
   return tokens.map((token) =>
@@ -48,17 +52,11 @@ const tokenize = (expression: string): Token[] => {
   );
 };
 
-const evaluateOperations = (
-  tokens: Token[],
-  precedence?: number,
-): Token[] => {
+const evaluateOperations = (tokens: Token[]): Token[] => {
   if (tokens.length <= 1) return tokens;
 
-  // Find first valid operator position
-  const opIndex = tokens.findIndex((_, i) =>
-    i % 2 === 1 && (!precedence ||
-      operatorPrecedence[tokens[i] as Operator] === precedence)
-  );
+  // Find first operator position
+  const opIndex = tokens.findIndex((_, i) => i % 2 === 1);
 
   if (opIndex === -1) return tokens;
 

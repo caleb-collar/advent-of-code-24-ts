@@ -11,6 +11,19 @@ export const colors = [
 export const bold = '\x1b[1m' as const;
 export const reset = '\x1b[0m' as const;
 
+export const safeRegexPatternFrom = (input: string | string[]): string => {
+  // Escape special regex characters
+  const escapeRegExp = (str: string): string => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
+
+  // Convert input to array if it's a string
+  const terms = Array.isArray(input) ? input : [input];
+
+  // Escape each term and join with |
+  return terms.map(escapeRegExp).join('|');
+};
+
 export class ArrExt<T> extends Array<T> {
   constructor(...items: T[]) {
     super(...items);
