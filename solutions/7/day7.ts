@@ -54,7 +54,10 @@ const daySeven = async (lines: string[]) => {
     partTwoTestResults.map((c) => c.valid ? c.outcome : 0),
   );
   spinner.stop();
-  console.log('❄ SUM OF VALID CALIBRATION RESULTS WITH CONCAT: ', sumValidPartTwo);
+  console.log(
+    '❄ SUM OF VALID CALIBRATION RESULTS WITH CONCAT: ',
+    sumValidPartTwo,
+  );
 };
 
 const getOutcomeAndOperands = (line: string): Calibration => {
