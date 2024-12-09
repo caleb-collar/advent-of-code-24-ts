@@ -99,6 +99,13 @@ export class UndirectedGraph {
     }));
   }
 
+  sumUniquePositions = (path: Position[]) =>
+    new Set(path.map((pos) => `${pos.row},${pos.col}`)).size;
+
+  getDimensions(): { rows: number; cols: number } {
+    return { rows: this.data.length, cols: this.data[0].length };
+  }
+
   /** Checks if a position is within grid boundaries */
   isInBounds(pos: Position): boolean {
     return pos.row >= 0 && pos.row < this.data.length &&
@@ -111,18 +118,20 @@ export class UndirectedGraph {
   }
 
   /**
-   * Sets the character at given position
+   * Sets the character/unicode at given position
    * @param pos Position to update
-   * @param value New character value
+   * @param value Character or unicode to set
    * @returns this (for method chaining)
-   * @throws Error if position is out of bounds
+   * @throws Error if position is out of bounds or invalid character
    */
   setNode(pos: Position, value: string): UndirectedGraph {
     if (!this.isInBounds(pos)) {
       throw new Error(`Position ${this.toString(pos)} is out of bounds`);
     }
-    if (value.length !== 1) {
-      throw new Error('Value must be a single character');
+
+    // Allow emoji/unicode or require single char
+    if (!/^\p{Extended_Pictographic}$|^.$|^\p{Emoji}$/u.test(value)) {
+      throw new Error('Value must be a single character or emoji');
     }
 
     this.data[pos.row][pos.col] = value;
@@ -175,14 +184,19 @@ export class UndirectedGraph {
     return { value: parseInt(num), positions };
   }
 
-  printHighlighted(positions: Position[]): void {
+  printHighlighted(
+    positions: Position[],
+    color: number = 1,
+    padding: number = 1,
+  ): void {
     console.log(
       this.data.map((row, i) =>
-        row.map((char, j) =>
-          positions.some((p) => p.row === i && p.col === j)
-            ? `${colors[1]}${char}${reset}`
-            : char
-        ).join('')
+        row.map((char, j) => {
+          const cell = positions.some((p) => p.row === i && p.col === j)
+            ? `${colors[color]}${char}${reset}`
+            : char;
+          return cell.padEnd(padding);
+        }).join('')
       ).join('\n'),
     );
   }
