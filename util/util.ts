@@ -81,9 +81,26 @@ export class UndirectedGraph {
     [1, 1], // bottom-right
   ] as const;
 
+  /** Four cardinal directions for adjacent positions */
+  static cardinalDirections = [
+    [-1, 0], // top
+    [0, -1], // left
+    [0, 1], // right
+    [1, 0], // bottom
+  ] as const;
+
   /** Creates a graph from an array of strings */
   constructor(lines: string[]) {
     this.data = lines.map((line) => line.trim().split(''));
+  }
+
+  /** Iterates over the values of each node */
+  forEachNode(callback: (value: string, pos: Position) => void): void {
+    for (let row = 0; row < this.data.length; row++) {
+      for (let col = 0; col < this.data[row].length; col++) {
+        callback(this.data[row][col], { row, col });
+      }
+    }
   }
 
   /** Converts position to string format "row,col" */
@@ -94,6 +111,14 @@ export class UndirectedGraph {
   /** Returns all eight adjacent positions (including diagonals) */
   getAdjacentPositions(pos: Position): Position[] {
     return UndirectedGraph.directions.map(([dx, dy]) => ({
+      row: pos.row + dx,
+      col: pos.col + dy,
+    }));
+  }
+
+  /** Returns all four cardinal adjacent positions */
+  getCardinalAdjacentPositions(pos: Position): Position[] {
+    return UndirectedGraph.cardinalDirections.map(([dx, dy]) => ({
       row: pos.row + dx,
       col: pos.col + dy,
     }));
