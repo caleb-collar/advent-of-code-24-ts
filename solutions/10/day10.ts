@@ -14,12 +14,14 @@ const dayTen = (lines: string[]) => {
   const topoMap = new UndirectedGraph(lines);
   const starts = findStarts(topoMap);
   const trails = getAllTrails(topoMap, starts);
-  console.log('Num starts: ', starts.length);
   console.log(
     '❄ TRAIL SCORE SUM: ',
     ArrExt.sum(trails.map((t) => t.trailScore)),
   );
-  console.log('❄ pt2: ');
+  console.log(
+    '❄ TRAIL RATING SUM: ',
+    ArrExt.sum(trails.map((t) => t.rating)),
+  );
 };
 
 const findStarts = (graph: UndirectedGraph) => {
@@ -77,8 +79,9 @@ const findPaths = (graph: UndirectedGraph, start: Position) => {
 
   const terminuses = paths.map((path) => path[path.length - 1]);
   const trailScore = graph.sumUniquePositions(terminuses);
+  const rating = paths.length;
 
-  return { paths, trailScore };
+  return { paths, trailScore, rating };
 };
 
 const getAllTrails = (graph: UndirectedGraph, starts: Position[]) => {
